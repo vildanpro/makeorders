@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Выписка</title>
+</head>
+<body>
+
+
+
+	<center>
+		{% if cod_pl %}
+			<form action="/">
+				<input type="submit" value="Выбор ЛС">
+			</form>
+		{% endif %}
+
+		{% if cod_pl == 0 %}
+			<h2>Введите номер лицевого счёта:</h2>
+			<form action="/">
+				<input name="cod_pl" type="text">
+				<input type="submit" value="Загрузить">
+			</form>
+		{% endif %}
+
+		{% if cod_pl > 0 %}
+			<h2>ЛС №: {{ cod_pl }}</h2>
+
+			{% if i_owner == 0 %}
+				<form action="/">
+					<select name="i_owner" required>
+							<option value="" disabled selected>Выберите поставщика</option>
+    						{% for supplier in suppliers %}
+								<option value="{{ supplier.i_owner }}">{{ supplier.supplier }}</option>
+							{% endfor %}
+						<input type="submit" value="Выбрать">
+						<input type="hidden" name="cod_pl" value="{{ cod_pl }}">
+					</select>
+				</form>
+
+			{% elif i_owner %}
+				{% for item in suppliers %}
+					{% if item.i_owner == i_owner %}
+						<h2>Поставщик: {{ item.supplier }}</h2>
+					{% endif %}
+				{% endfor %}
+
+				<form action="/pdf" target="_blank">
+					<input type="submit" value="Сформировать PDF">
+					<input type="hidden" name="cod_pl" value="{{ cod_pl }}">
+					<input type="hidden" name="i_owner" value="{{ i_owner }}">
+					<input type="hidden" name="all_periods" value="{{ all_periods }}">
+				</form>
+
+
+				<h3>Выберите период</h3>
+				<form action="/">
+					<select name="range_of_periods"required>
+							<option value="" disabled selected>Выберите период</option>
+							<option value="{{ all_periods }}"> Все периоды ({{ all_periods }})</option>
+							{% for period in list_range_of_periods %}
+								<option value="{{ period }}">{{ period }}</option>
+							{% endfor %}
+						<input type="submit" value="Выбрать">
+						<input type="hidden" name="cod_pl" value="{{ cod_pl }}">
+						<input type="hidden" name="i_owner" value="{{ i_owner }}">
+					</select>
+				</form>
+
+			{% endif %}
+
+			{% if range_of_periods and cod_pl and i_owner %}
+
+				<br>
+
+				{% for period in range(start_period_range, end_period_range) %}
+
+					<h3>Период {{ period }}</h3>
+
+					<table border="1">
+						<tr>
+							<th>Cod</th>
+							<th>Servicename</th>
+							<th>Total</th>
+						</tr>
+
+						{% for item in order_data %}
+							{% if item.for_period == period %}
+								<tr>
+									<td>{{ item.cod_u }}</td>
+									<td>{{ item.servicename }}</td>
+									<td>{{ item.total }}</td>
+								</tr>
+							{% endif %}
+						{% endfor %}
+					</table>
+				{% endfor %}
+
+			{% endif %}
+
+		{% endif %}
+
+		
+
+
+	</center>
+		
+</body>
+</html>

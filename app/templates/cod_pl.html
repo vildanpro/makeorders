@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>COD_PL</title>
+</head>
+<body>
+    <form action="/bysupplier">
+    <h2>Выберите поставщика:</h2>
+    <select name="i_owner">
+            <option value="">Выберите поставщика</option>
+            {% for item in data.suppliers %}
+            <option value="{{ item.i_owner }}">{{ item.supplier }}</option>
+            {% endfor %}
+        </select>
+    <br><br><br>
+    <input type="submit" value="Отфильтровать по поставщику">
+    <input type="hidden" name="cod_pl" value="{{ cod_pl }}">
+    </form>
+</body>
+</html>

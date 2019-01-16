@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>COD_PL</title>
+</head>
+<body>
+    <h2>Выберите период:</h2>
+    <form action="/getpdf">
+        <select name="periods">
+            <option value="">Выберите период</option>
+            {% for item in data.periods %}
+            <option value="{{ item }}">{{ item }}</option>
+            {% endfor %}
+        </select>
+        <br><br><br>
+        <input type="submit" value="Сформировать выписку">
+        <input type="hidden" name="cod_pl" value="{{ cod_pl }}">
+        <input type="hidden" name="i_owner" value="{{ i_owner }}">
+    </form>
+</body>
+</html>
